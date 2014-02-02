@@ -161,7 +161,6 @@ main = do
 runScotty db = scotty 8888 $ do
 --  middleware logStdoutDev
   get (capture "/json-form") $ file "json-form.html"
-  get (capture "/submitted") $ html "<h3>Thenk you foar yu0r submission</h3>"
   get (regex "^(/|/index)$") $ getIndex db
   get (capture "/shoe/:id") $ param "id" >>= parseID (getShoe db)
   get (capture "/images/:id") $ param "id" >>= getImg
