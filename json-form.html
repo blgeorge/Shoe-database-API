@@ -1,0 +1,98 @@
+<html>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+} else {
+    document.getElementById('shoeData').style.display = 'none';
+    alert('The File APIs are not fully supported in this browser.');
+}
+
+var sFilename = "";
+var sFile = "";
+
+function fileReader64(e) {
+  var reader = new FileReader();
+  var file = e.files[0];
+  reader.onload = function(readerEvt) {
+    var binaryString = readerEvt.target.result;
+    sFile = btoa(binaryString);
+    sFilename = e.value;
+  };
+  reader.readAsBinaryString(file);
+}
+
+function mySubmit(){
+  var sDesc = $('#sDesc')[0].value;
+  var sSize = parseInt($('#sSize')[0].value);
+  var sColor = $('#sColor')[0].value;
+  $.ajax({
+    type: 'POST',
+    url: 'http://localhost:8888/json',
+    contentType: 'application/json',
+    dataType: 'json',
+    data: JSON.stringify({jssDesc: sDesc, jssSize: sSize, jssColor: sColor, jssFile: sFile, jssFilename: sFilename}),
+    success: function(data,textStatus){
+      window.location = data.redirect;
+    },
+    error: function(data,textStatus){
+      var responseJSON = $.parseJSON(data.responseText);
+      alert("Error: " + responseJSON.error);
+      window.location = responseJSON.redirect;
+    }
+  });
+  return true;
+}
+</script>
+<body>
+<div id="shoeData">
+<table>
+  <tr>
+    <td>Description:</td>
+    <td><input type="text" id="sDesc" /></td>
+  </tr>
+  <tr>
+    <td>Size:</td>
+    <td>
+      <select id="sSize">
+        <option disabled="disabled" value="">Pick a size:</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td>Color:</td>
+    <td>
+      <select id="sColor">
+        <option disabled="disabled" value="">Select a color:</option>
+        <option value="red">Red</option>
+        <option value="orange">Orange</option>
+        <option value="yellow">Yellow</option>
+        <option value="green">Green</option>
+        <option value="blue">Blue</option>
+        <option value="purple">Purple</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td>Image:</td>
+    <td><input type="file" value="" id="sFile" onChange="fileReader64(this)" /></td>
+  </tr>
+  <tr>
+    <td colspan="2"><input type="button" onClick="mySubmit();" value="Submit" /></td>
+  </tr>
+</table>
+</div>
+</body>
+</html>
