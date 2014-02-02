@@ -6,12 +6,15 @@ A web API for interaction with a shoe database.
 **Installation requirements**
 
 *Database*
+
 This particular implementation uses SQLite3 for database interaction.  For testing, an empty database named "shoe.sqlite3" should be created with the following table schema: CREATE TABLE shoes ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "description" text,"size" int, "color" text);
 
 *Directory structure*
+
 A directory named "/images" should be created in the server root directory. This will be the storage location for all user-submitted images.
 
 *Haskell requirements*
+
 This module makes use of GHC's "DeriveGeneric" and "OverloadedStrings" language pragama and thus requires the use of the GHC compiler.  My own tests were conducted with GHC version 7.6.3.
 
 Required Haskell libraries:
