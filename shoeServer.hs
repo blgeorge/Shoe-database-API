@@ -79,12 +79,12 @@ postJSON db = do
       json $ object ["error" .= ("myErrorMessage" :: T.Text), "redirect" .= ("/failure" :: T.Text)]
       status internalServerError500
     Right shoeID -> do
-      let shoeImgFile = "images" </> ("shoe-" ++ (show shoeID) ++ ".jpg") --TODO account for non-jpeg images
+      let shoeImgFile = "images" </> ("shoe-" ++ (show shoeID) ++ ".jpg")
       h <- liftIO $ writeShoeFile b64 shoeImgFile
       liftIO $ putStrLn $ show s --debugging
       json $ object ["ok" .= ("ok" :: T.Text) ,"redirect" .= (("/shoe/" .++ (packshow shoeID)) :: T.Text) ]
 
-selectShoe :: SQL.Database -> Int64 -> IO (Either T.Text (T.Text,Int64,T.Text)) --probably should replace this with more complex type
+selectShoe :: SQL.Database -> Int64 -> IO (Either T.Text (T.Text,Int64,T.Text))
 selectShoe db i = do
   stmt <- SQL.prepare db "SELECT * FROM shoes WHERE id = ?"
   SQL.bindSQLData stmt 1 (SQL.SQLInteger i)
